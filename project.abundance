@@ -246,7 +246,12 @@
       "x": 0.898840206185567,
       "y": 0.4636871508379888,
       "uniqueID": "id-47",
-      "ioValues": []
+      "ioValues": [
+        {
+          "name": "Shape 1",
+          "ioValue": null
+        }
+      ]
     },
     {
       "atomType": "Assembly",
@@ -266,8 +271,8 @@
     },
     {
       "atomType": "Molecule",
-      "x": 0.21198453608247422,
-      "y": 0.6871508379888268,
+      "x": 0.4478092783505154,
+      "y": 0.6480446927374302,
       "uniqueID": "id-55",
       "name": "outer",
       "ioValues": [
@@ -512,6 +517,10 @@
             {
               "name": "Shape 1",
               "ioValue": null
+            },
+            {
+              "name": "Shape 2",
+              "ioValue": null
             }
           ]
         },
@@ -564,7 +573,7 @@
             },
             {
               "name": "height",
-              "ioValue": 10
+              "ioValue": 3
             }
           ]
         }
@@ -579,6 +588,11 @@
           "ap2Name": "x",
           "ap1ID": "id-62",
           "ap2ID": "id-96"
+        },
+        {
+          "ap2Name": "height",
+          "ap1ID": "id-65",
+          "ap2ID": "id-113"
         },
         {
           "ap2Name": "geometry",
@@ -624,9 +638,30 @@
           "ap2Name": "geometry",
           "ap1ID": "id-110",
           "ap2ID": "id-113"
+        },
+        {
+          "ap2Name": "Shape 2",
+          "ap1ID": "id-113",
+          "ap2ID": "id-100"
         }
       ],
       "fileTypeVersion": 1
+    },
+    {
+      "atomType": "Difference",
+      "x": 0.5579896907216495,
+      "y": 0.40782122905027934,
+      "uniqueID": "id-118",
+      "ioValues": [
+        {
+          "name": "retain",
+          "ioValue": "__GEOMETRY_INPUT__"
+        },
+        {
+          "name": "remove",
+          "ioValue": "__GEOMETRY_INPUT__"
+        }
+      ]
     }
   ],
   "allConnectors": [
@@ -684,6 +719,21 @@
       "ap2Name": "number or geometry",
       "ap1ID": "id-47",
       "ap2ID": "id-2"
+    },
+    {
+      "ap2Name": "remove",
+      "ap1ID": "id-50",
+      "ap2ID": "id-118"
+    },
+    {
+      "ap2Name": "retain",
+      "ap1ID": "id-55",
+      "ap2ID": "id-118"
+    },
+    {
+      "ap2Name": "Shape 1",
+      "ap1ID": "id-118",
+      "ap2ID": "id-47"
     }
   ],
   "unitsKey": "MM",
