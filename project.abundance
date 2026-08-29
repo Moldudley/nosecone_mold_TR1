@@ -11,8 +11,8 @@
     },
     {
       "name": "outer_diameter",
-      "ioValue": 3,
-      "currentEquation": "3"
+      "ioValue": 6,
+      "currentEquation": "6"
     },
     {
       "name": "shoulder_length",
@@ -67,7 +67,7 @@
         },
         {
           "name": "Outer_Diameter",
-          "ioValue": 3
+          "ioValue": 6
         },
         {
           "name": "C",
@@ -101,7 +101,7 @@
             },
             {
               "name": "outerDiameter",
-              "ioValue": 3
+              "ioValue": 6
             },
             {
               "name": "C",
@@ -214,15 +214,273 @@
     },
     {
       "atomType": "Circle",
-      "x": 0.2068298969072165,
-      "y": 0.40782122905027934,
+      "x": 0.21198453608247422,
+      "y": 0.446927374301676,
       "uniqueID": "id-40",
       "ioValues": [
         {
           "name": "diameter",
-          "ioValue": 10
+          "ioValue": 5.9,
+          "currentEquation": "5.9"
         }
       ]
+    },
+    {
+      "atomType": "Extrude",
+      "x": 0.3068298969072165,
+      "y": 0.40782122905027934,
+      "uniqueID": "id-43",
+      "ioValues": [
+        {
+          "name": "geometry",
+          "ioValue": "__GEOMETRY_INPUT__"
+        },
+        {
+          "name": "height",
+          "ioValue": 3
+        }
+      ]
+    },
+    {
+      "atomType": "Assembly",
+      "x": 0.898840206185567,
+      "y": 0.4636871508379888,
+      "uniqueID": "id-47",
+      "ioValues": []
+    },
+    {
+      "atomType": "Assembly",
+      "x": 0.4497422680412371,
+      "y": 0.40782122905027934,
+      "uniqueID": "id-50",
+      "ioValues": [
+        {
+          "name": "Shape 1",
+          "ioValue": null
+        },
+        {
+          "name": "Shape 2",
+          "ioValue": null
+        }
+      ]
+    },
+    {
+      "atomType": "Molecule",
+      "x": 0.21198453608247422,
+      "y": 0.6871508379888268,
+      "uniqueID": "id-55",
+      "name": "outer",
+      "ioValues": [
+        {
+          "name": "nc_length",
+          "ioValue": 21
+        },
+        {
+          "name": "outer_diameter",
+          "ioValue": 6
+        },
+        {
+          "name": "shoulder_length",
+          "ioValue": 3
+        }
+      ],
+      "topLevel": false,
+      "allAtoms": [
+        {
+          "atomType": "Output",
+          "x": 0.98,
+          "y": 0.5,
+          "uniqueID": "id-57",
+          "ioValues": [
+            {
+              "name": "number or geometry",
+              "ioValue": "__GEOMETRY_INPUT__"
+            }
+          ]
+        },
+        {
+          "atomType": "Input",
+          "x": 0.025384615384615384,
+          "y": 0.15384615384615385,
+          "uniqueID": "id-59",
+          "name": "nc_length",
+          "type": "number"
+        },
+        {
+          "atomType": "Input",
+          "x": 0.025384615384615384,
+          "y": 0.24615384615384617,
+          "uniqueID": "id-62",
+          "name": "outer_diameter",
+          "type": "number"
+        },
+        {
+          "atomType": "Input",
+          "x": 0.025384615384615384,
+          "y": 0.3384615384615385,
+          "uniqueID": "id-65",
+          "name": "shoulder_length",
+          "type": "number"
+        },
+        {
+          "atomType": "GitHubMolecule",
+          "x": 0.19845360824742267,
+          "y": 0.2737430167597765,
+          "uniqueID": "id-74",
+          "name": "Nosecone_Haack_Series_notHollow",
+          "ioValues": [
+            {
+              "name": "Length",
+              "ioValue": 10
+            },
+            {
+              "name": "Outer_Diameter",
+              "ioValue": 10
+            },
+            {
+              "name": "C",
+              "ioValue": 10
+            }
+          ],
+          "topLevel": false,
+          "allAtoms": [
+            {
+              "atomType": "Output",
+              "x": 0.98,
+              "y": 0.5,
+              "uniqueID": "id-69",
+              "ioValues": [
+                {
+                  "name": "number or geometry",
+                  "ioValue": "__GEOMETRY_INPUT__"
+                }
+              ]
+            },
+            {
+              "atomType": "Code",
+              "x": 0.24077328646748683,
+              "y": 0.6116751269035533,
+              "uniqueID": "id-70",
+              "ioValues": [
+                {
+                  "name": "length",
+                  "ioValue": 10
+                },
+                {
+                  "name": "outerDiameter",
+                  "ioValue": 10
+                },
+                {
+                  "name": "C",
+                  "ioValue": 10
+                }
+              ],
+              "interpreterVersion": 1,
+              "code": "/**\r\n * Nose cone from the Haack series, equation-driven spline outer profile.\r\n * Solid of revolution around the Z axis; tip at z=0, base at z=length.\r\n * length, outerDiameter in mm.\r\n * C sets the profile: 0 = LD-Haack / Von Karman (min drag for given length/diameter),\r\n * 0.333 = LV-Haack (min drag for given length/volume).\r\n */\r\nfunction run(\r\n  length: number = 100,\r\n  outerDiameter: number = 40,\r\n  C: number = 0,\r\n): Assembly {\r\n  const R = outerDiameter / 2;\r\n  const numPoints = Math.round(length * 3);\r\n\r\n  function radiusAt(x: number): number {\r\n    const theta = Math.acos(1 - (2 * x) / length);\r\n    return (\r\n      (R / Math.sqrt(Math.PI)) *\r\n      Math.sqrt(theta - Math.sin(2 * theta) / 2 + C * Math.pow(Math.sin(theta), 3))\r\n    );\r\n  }\r\n\r\n  function normalize(v: [number, number]): [number, number] {\r\n    const len = Math.hypot(v[0], v[1]);\r\n    return len === 0 ? [0, 0] : [v[0] / len, v[1] / len];\r\n  }\r\n\r\n  const curvePoints: [number, number][] = [[0, 0]];\r\n  for (let i = 1; i <= numPoints; i++) {\r\n    const x = (i / numPoints) * length;\r\n    curvePoints.push([x, radiusAt(x)]);\r\n  }\r\n\r\n  const tangents = curvePoints.map((_, i) => {\r\n    const prev = curvePoints[Math.max(0, i - 1)];\r\n    const next = curvePoints[Math.min(curvePoints.length - 1, i + 1)];\r\n    return normalize([next[0] - prev[0], next[1] - prev[1]]);\r\n  });\r\n\r\n  let pen = replicad.draw(curvePoints[0]);\r\n  for (let i = 1; i < curvePoints.length; i++) {\r\n    const [x0, y0] = curvePoints[i - 1];\r\n    const [x1, y1] = curvePoints[i];\r\n    const d = Math.hypot(x1 - x0, y1 - y0);\r\n    const t0 = tangents[i - 1];\r\n    const t1 = tangents[i];\r\n\r\n    const c1: [number, number] = [x0 + (t0[0] * d) / 3, y0 + (t0[1] * d) / 3];\r\n    const c2: [number, number] = [x1 - (t1[0] * d) / 3, y1 - (t1[1] * d) / 3];\r\n\r\n    pen = pen.cubicBezierCurveTo([x1, y1], c1, c2);\r\n  }\r\n\r\n  const profile = pen.lineTo([length, 0]).close();\r\n\r\n  const noseCone = profile\r\n    .sketchOnPlane()\r\n    .revolve([1, 0, 0], { angle: 360 })\r\n    .rotate(90, [0, 0, 0], [0, 1, 0]);\r\n\r\n  return new Assembly({\r\n    geometry: noseCone,\r\n    tags: [\"nose-cone\", \"haack-series\"],\r\n    bom: [`Haack series nose cone, length ${length}mm, outer diameter ${outerDiameter}mm, C=${C}`],\r\n  });\r\n}",
+              "compiledCode": "\"use strict\";\n/**\n * Nose cone from the Haack series, equation-driven spline outer profile.\n * Solid of revolution around the Z axis; tip at z=0, base at z=length.\n * length, outerDiameter in mm.\n * C sets the profile: 0 = LD-Haack / Von Karman (min drag for given length/diameter),\n * 0.333 = LV-Haack (min drag for given length/volume).\n */\nfunction run(length = 100, outerDiameter = 40, C = 0) {\n    const R = outerDiameter / 2;\n    const numPoints = Math.round(length * 3);\n    function radiusAt(x) {\n        const theta = Math.acos(1 - (2 * x) / length);\n        return ((R / Math.sqrt(Math.PI)) *\n            Math.sqrt(theta - Math.sin(2 * theta) / 2 + C * Math.pow(Math.sin(theta), 3)));\n    }\n    function normalize(v) {\n        const len = Math.hypot(v[0], v[1]);\n        return len === 0 ? [0, 0] : [v[0] / len, v[1] / len];\n    }\n    const curvePoints = [[0, 0]];\n    for (let i = 1; i <= numPoints; i++) {\n        const x = (i / numPoints) * length;\n        curvePoints.push([x, radiusAt(x)]);\n    }\n    const tangents = curvePoints.map((_, i) => {\n        const prev = curvePoints[Math.max(0, i - 1)];\n        const next = curvePoints[Math.min(curvePoints.length - 1, i + 1)];\n        return normalize([next[0] - prev[0], next[1] - prev[1]]);\n    });\n    let pen = replicad.draw(curvePoints[0]);\n    for (let i = 1; i < curvePoints.length; i++) {\n        const [x0, y0] = curvePoints[i - 1];\n        const [x1, y1] = curvePoints[i];\n        const d = Math.hypot(x1 - x0, y1 - y0);\n        const t0 = tangents[i - 1];\n        const t1 = tangents[i];\n        const c1 = [x0 + (t0[0] * d) / 3, y0 + (t0[1] * d) / 3];\n        const c2 = [x1 - (t1[0] * d) / 3, y1 - (t1[1] * d) / 3];\n        pen = pen.cubicBezierCurveTo([x1, y1], c1, c2);\n    }\n    const profile = pen.lineTo([length, 0]).close();\n    const noseCone = profile\n        .sketchOnPlane()\n        .revolve([1, 0, 0], { angle: 360 })\n        .rotate(90, [0, 0, 0], [0, 1, 0]);\n    return new Assembly({\n        geometry: noseCone,\n        tags: [\"nose-cone\", \"haack-series\"],\n        bom: [`Haack series nose cone, length ${length}mm, outer diameter ${outerDiameter}mm, C=${C}`],\n    });\n}\n"
+            },
+            {
+              "atomType": "Input",
+              "x": 0.025384615384615384,
+              "y": 0.15384615384615385,
+              "uniqueID": "id-71",
+              "name": "Length"
+            },
+            {
+              "atomType": "Input",
+              "x": 0.025384615384615384,
+              "y": 0.24615384615384617,
+              "uniqueID": "id-72",
+              "name": "Outer_Diameter"
+            },
+            {
+              "atomType": "Input",
+              "x": 0.025384615384615384,
+              "y": 0.3384615384615385,
+              "uniqueID": "id-73",
+              "name": "C"
+            }
+          ],
+          "allConnectors": [
+            {
+              "ap2Name": "number or geometry",
+              "ap1ID": "id-70",
+              "ap2ID": "id-69"
+            },
+            {
+              "ap2Name": "length",
+              "ap1ID": "id-71",
+              "ap2ID": "id-70"
+            },
+            {
+              "ap2Name": "outerDiameter",
+              "ap1ID": "id-72",
+              "ap2ID": "id-70"
+            },
+            {
+              "ap2Name": "C",
+              "ap1ID": "id-73",
+              "ap2ID": "id-70"
+            }
+          ],
+          "parentRepo": {
+            "lastFoundGit": "2026-08-29T18:23:38.912Z",
+            "privateRepo": false,
+            "repoName": "Nosecone_Haack_Series_notHollow",
+            "dateCreated": "2026-08-19T21:11:04Z",
+            "likes": 0,
+            "pngURL": "https://raw.githubusercontent.com/Moldudley/Nosecone_Haack_Series_notHollow/main/project.png",
+            "readMe": "https://raw.githubusercontent.com/Moldudley/Nosecone_Haack_Series_notHollow/master/README.md?sanitize=true",
+            "yyyy": 2026,
+            "topMoleculeID": "id-1272",
+            "userSetAsThumbnail": false,
+            "githubMoleculesUsed": [],
+            "html_url": "https://github.com/Moldudley/Nosecone_Haack_Series_notHollow",
+            "topics": [],
+            "pullRequests": [],
+            "userSetThumbnail": true,
+            "parentRepo": null,
+            "forks": 0,
+            "dateModified": "739847",
+            "ranking": 0.3,
+            "searchField": "nosecone_haack_series_nothollow moldudley  ",
+            "owner": "Moldudley",
+            "description": "",
+            "contentURL": "https://raw.githubusercontent.com/Moldudley/Nosecone_Haack_Series_notHollow/master/project.abundance?sanitize=true",
+            "svgURL": "https://raw.githubusercontent.com/Moldudley/Nosecone_Haack_Series_notHollow/master/project.svg?sanitize=true",
+            "isLocal": false
+          },
+          "unitsKey": "MM",
+          "fileTypeVersion": 1,
+          "lastReloadedFromGithubAt": 1788042230477
+        },
+        {
+          "atomType": "Equation",
+          "x": 0.15206185567010308,
+          "y": 0.3854748603351955,
+          "uniqueID": "id-89",
+          "name": "x+y",
+          "ioValues": [
+            {
+              "name": "x",
+              "ioValue": 21
+            },
+            {
+              "name": "y",
+              "ioValue": 1
+            }
+          ],
+          "currentEquation": "x+y"
+        }
+      ],
+      "allConnectors": [
+        {
+          "ap2Name": "x",
+          "ap1ID": "id-59",
+          "ap2ID": "id-89"
+        }
+      ],
+      "fileTypeVersion": 1
     }
   ],
   "allConnectors": [
@@ -232,14 +490,54 @@
       "ap2ID": "id-19"
     },
     {
+      "ap2Name": "nc_length",
+      "ap1ID": "id-4",
+      "ap2ID": "id-55"
+    },
+    {
       "ap2Name": "Outer_Diameter",
       "ap1ID": "id-7",
       "ap2ID": "id-19"
     },
     {
+      "ap2Name": "outer_diameter",
+      "ap1ID": "id-7",
+      "ap2ID": "id-55"
+    },
+    {
+      "ap2Name": "height",
+      "ap1ID": "id-10",
+      "ap2ID": "id-43"
+    },
+    {
+      "ap2Name": "shoulder_length",
+      "ap1ID": "id-10",
+      "ap2ID": "id-55"
+    },
+    {
       "ap2Name": "geometry",
       "ap1ID": "id-19",
       "ap2ID": "id-34"
+    },
+    {
+      "ap2Name": "Shape 1",
+      "ap1ID": "id-34",
+      "ap2ID": "id-50"
+    },
+    {
+      "ap2Name": "geometry",
+      "ap1ID": "id-40",
+      "ap2ID": "id-43"
+    },
+    {
+      "ap2Name": "Shape 2",
+      "ap1ID": "id-43",
+      "ap2ID": "id-50"
+    },
+    {
+      "ap2Name": "number or geometry",
+      "ap1ID": "id-47",
+      "ap2ID": "id-2"
     }
   ],
   "unitsKey": "MM",
